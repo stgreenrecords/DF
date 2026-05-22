@@ -6,7 +6,7 @@ Follow the universal Dark Factory instructions in `AGENTS.md` and the detailed w
 
 - Treat `df/00-start-here.md` as the boot sequence.
 - Use role files in `df/roles/` for behavior and deliverables.
-- Update runtime evidence in `df/runtime/` and task artifacts in `df/artifacts/<task-id>/`.
+- Update runtime evidence in `df/runtime/` and task artifacts in `df/artifacts/{task-id}/`.
 - Do not finish a task unless `qa` has passed it and `po` has accepted it.
 - If work is rejected, return it to `dev` with evidence and defects.
 

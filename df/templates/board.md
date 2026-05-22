@@ -2,7 +2,7 @@
 
 | Priority | Task ID | Title | Type | State | Owner role | Blocked? | Last updated | Next action |
 |---|---|---|---|---|---|---|---|---|
-| P1 | DF-001 | Example task | Story/Bug/Task | OPEN | factory | No | YYYY-MM-DD HH:mm | Prepare task |
+| P1 | TASK-001 | Example task | Story/Bug/Task | OPEN | factory | No | YYYY-MM-DD HH:mm | Prepare task |
 
 ## State legend
 

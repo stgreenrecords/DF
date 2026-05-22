@@ -2,21 +2,16 @@
 
 Append-only chronological log of factory actions.
 
-## 2026-05-22 local - factory - DF-001
+No activity has been recorded yet.
+
+Use `df/templates/activity-log-entry.md` for new entries.
+
+## 2026-05-22 local - sa - Framework enhancement
 
 - State: DONE
-- Action: Created initial Dark Factory Markdown operating framework.
-- Evidence: `README.md`, `AGENTS.md`, `CLAUDE.md`, `JETBRAINS_AI.md`, `.github/copilot-instructions.md`, `df/` documentation.
+- Action: Added refinement/intake phase with questions loop to the Dark Factory framework.
+- Evidence: Updated `df/02-state-machine.md` (new INTAKE/REFINEMENT states), `df/01-operating-model.md` (updated flow), `df/03-orchestration-rules.md` (refinement loop), `df/roles/sa.md` (refinement checklist), `df/roles/po.md` (answering questions), `df/00-start-here.md` (task selection), `AGENTS.md` (role table), `df/04-documentation-standards.md` (artifact list), `df/templates/refinement-questions.md` (new template).
 - Result: PASS
-- Next: Await first real delivery task from the user, then run the SDLC loop.
-- Risks/blockers: No delivery backlog exists yet.
-
-## 2026-05-22 local - QA/PO - DF-001
-
-- State: DONE
-- Action: Cleaned Markdown placeholder syntax and validated the complete required file set.
-- Evidence: IDE Markdown inspection returned no errors for edited files; PowerShell file-existence check returned `PASS: All 31 required Dark Factory Markdown files exist.`
-- Result: PASS
-- Next: Await first real delivery task from the user, then run the SDLC loop.
-- Risks/blockers: No delivery backlog exists yet.
+- Next: Framework ready for use. Await next delivery task.
+- Risks/blockers: None.
 

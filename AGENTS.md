@@ -24,8 +24,10 @@ If the user explicitly assigns a role, act as that role. Otherwise infer the rol
 
 | Task state | Responsible role |
 |---|---|
-| `OPEN`, `READY_FOR_DEV`, `RETURNED_TO_DEV` | `dev` |
-| `NEEDS_ARCHITECTURE`, `ARCHITECTURE_REVIEW` | `sa` |
+| `OPEN`, `INTAKE`, `REFINEMENT_IN_PROGRESS` | `sa` |
+| `REFINEMENT_QUESTIONS` | `po` |
+| `REFINED`, `NEEDS_ARCHITECTURE`, `ARCHITECTURE_REVIEW` | `sa` |
+| `READY_FOR_DEV`, `RETURNED_TO_DEV` | `dev` |
 | `READY_FOR_QA`, `QA_IN_PROGRESS`, `QA_FAILED` | `qa` |
 | `READY_FOR_PO`, `PO_REVIEW`, `PO_REJECTED` | `po` |
 | `DONE`, `BLOCKED`, `NO_TASKS` | Follow orchestration rules |

@@ -7,6 +7,10 @@ This file defines task states and allowed transitions. Agents must update `df/ru
 | State | Owner | Meaning |
 |---|---|---|
 | `OPEN` | factory | Task exists but has not been prepared. |
+| `INTAKE` | `sa` | Task is being triaged and refined from raw input. |
+| `REFINEMENT_IN_PROGRESS` | `sa` | SA is generating acceptance criteria and asking clarifying questions. |
+| `REFINEMENT_QUESTIONS` | `po` / human | Questions have been posted; PO or human product authority must answer before work continues. |
+| `REFINED` | factory | Questions answered or low-risk assumptions documented, acceptance criteria written, task is ready for architecture or dev. |
 | `NEEDS_ARCHITECTURE` | `sa` | Task needs solution design before development. |
 | `ARCHITECTURE_IN_PROGRESS` | `sa` | SA is designing or reviewing the approach. |
 | `READY_FOR_DEV` | `dev` | Task can be implemented. |
@@ -26,8 +30,15 @@ This file defines task states and allowed transitions. Agents must update `df/ru
 
 | From | To | Required evidence |
 |---|---|---|
-| `OPEN` | `NEEDS_ARCHITECTURE` | Architecture needed reason. |
-| `OPEN` | `READY_FOR_DEV` | Acceptance criteria and no architecture needed reason. |
+| `OPEN` | `INTAKE` | Raw task exists; refinement needed. |
+| `OPEN` | `READY_FOR_DEV` | Acceptance criteria already clear and no architecture needed. |
+| `OPEN` | `NEEDS_ARCHITECTURE` | Acceptance criteria clear but architecture needed. |
+| `INTAKE` | `REFINEMENT_IN_PROGRESS` | SA start note. |
+| `REFINEMENT_IN_PROGRESS` | `REFINEMENT_QUESTIONS` | Questions document created with impact, decision owner, recommendation, and safe-default status. |
+| `REFINEMENT_IN_PROGRESS` | `REFINED` | No critical questions remain; acceptance criteria and assumptions written. |
+| `REFINEMENT_QUESTIONS` | `REFINEMENT_IN_PROGRESS` | Answers provided with answer authority; SA resumes refinement. |
+| `REFINED` | `NEEDS_ARCHITECTURE` | Architecture needed reason. |
+| `REFINED` | `READY_FOR_DEV` | No architecture needed reason. |
 | `NEEDS_ARCHITECTURE` | `ARCHITECTURE_IN_PROGRESS` | SA start note. |
 | `ARCHITECTURE_IN_PROGRESS` | `READY_FOR_DEV` | Solution design artifact. |
 | `READY_FOR_DEV` | `DEV_IN_PROGRESS` | Dev start note. |

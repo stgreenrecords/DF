@@ -19,7 +19,11 @@ A role owns the task only while the task is in that role's state. Ownership must
 
 ```text
 OPEN
-  -> NEEDS_ARCHITECTURE
+  -> INTAKE
+  -> REFINEMENT_IN_PROGRESS
+  -> REFINEMENT_QUESTIONS (loop until all questions answered)
+  -> REFINED
+  -> NEEDS_ARCHITECTURE (if needed)
   -> READY_FOR_DEV
   -> DEV_IN_PROGRESS
   -> READY_FOR_QA
@@ -30,7 +34,23 @@ OPEN
   -> next task
 ```
 
-If architecture is unnecessary for a small, low-risk task, `dev` may document `Architecture: not required` with a reason and move directly from `OPEN` to `READY_FOR_DEV`.
+If the task already has clear acceptance criteria and no refinement is needed, it may skip directly from `OPEN` to `NEEDS_ARCHITECTURE` or `READY_FOR_DEV`.
+
+If architecture is unnecessary for a small, low-risk task, `dev` may document `Architecture: not required` with a reason and move directly from `REFINED` to `READY_FOR_DEV`.
+
+## Definition of Refined
+
+A task may move to `REFINED` only when:
+
+- raw input has been converted into a clear task summary and business goal;
+- acceptance criteria are specific, testable, and scoped;
+- refinement questions are answered with documented answer authority, or explicitly marked not applicable;
+- critical unanswered product, legal, security, compliance, budget, or scope decisions are not present;
+- low-risk assumptions, if any, are documented in `task.md` and referenced in the next handoff;
+- independent deliverables have been split into child tasks or documented as intentionally bundled;
+- expected validation approach is known well enough for Dev and QA to plan tests.
+
+A task must not be marked `REFINED` when the only basis for a critical product decision is an AI-generated guess.
 
 ## Rework flow
 
@@ -59,7 +79,9 @@ Required communication points:
 A task is ready for development when:
 
 - task id and summary exist;
-- acceptance criteria exist or assumptions are documented;
+- refinement is complete (acceptance criteria exist or assumptions are documented);
+- all refinement questions have been answered with authority, documented as safe low-risk assumptions, or moved to blockers;
+- no critical unanswered refinement decision remains;
 - dependencies and blockers are known;
 - architecture guidance exists when needed;
 - expected validation path is defined.

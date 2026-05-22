@@ -43,10 +43,13 @@ Choose tasks in this order:
 1. Tasks explicitly requested by the user in the current message.
 2. Tasks marked `RETURNED_TO_DEV`, because rejected work must be fixed first.
 3. Tasks marked `QA_FAILED` or `PO_REJECTED`.
-4. Tasks marked `READY_FOR_DEV` by priority.
-5. Tasks marked `OPEN` by priority.
-6. Bugs before enhancements when priority is equal.
-7. Smaller unblocked task before larger task when all else is equal.
+4. Tasks marked `REFINEMENT_QUESTIONS` (PO must unblock refinement).
+5. Tasks marked `READY_FOR_DEV` by priority.
+6. Tasks marked `REFINED` (decide architecture or send to dev).
+7. Tasks marked `INTAKE` or `REFINEMENT_IN_PROGRESS`.
+8. Tasks marked `OPEN` by priority.
+9. Bugs before enhancements when priority is equal.
+10. Smaller unblocked task before larger task when all else is equal.
 
 ## If there is no board yet
 

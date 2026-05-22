@@ -21,6 +21,51 @@ while factory is running:
     record NO_TASKS or BLOCKED and stop
 ```
 
+## Refinement loop
+
+When a task enters `INTAKE`, the following sub-loop applies:
+
+```text
+SA reads raw input
+SA generates only decision-grade questions + options + recommendations
+SA moves task to REFINEMENT_QUESTIONS
+PO answers questions from available product authority/context
+if PO cannot answer safely:
+  PO marks task BLOCKED for human/product input
+PO moves task to REFINEMENT_IN_PROGRESS
+SA reviews answers
+if more questions needed (max 3 rounds):
+  SA posts new questions -> loop
+else:
+  SA writes acceptance criteria
+  SA moves task to REFINED
+  SA decides: NEEDS_ARCHITECTURE or READY_FOR_DEV
+```
+
+### Refinement challenge rules
+
+The refinement loop is mandatory for ambiguous work, but it must not become a bureaucracy loop or a hallucination source.
+
+- Ask questions only when the answer can change scope, acceptance criteria, architecture, testing, risk, priority, or decomposition.
+- Do not ask questions that can be answered by reading repository code, existing docs, tests, logs, or linked artifacts.
+- Each question must include impact if unanswered and a recommended default when a safe default exists.
+- The PO role may answer from documented business context, existing product decisions, or explicit human input only. If none exists, PO must not invent stakeholder intent.
+- Critical unanswered questions must move the task to `BLOCKED`; they must not be converted into assumptions merely because the round limit was reached.
+- Low-risk assumptions are allowed only when documented in `task.md`, referenced in the handoff, and later verified by QA/PO.
+- If refinement discovers multiple independent deliverables, SA must split or propose child tasks instead of creating one oversized task.
+- Refinement completion does not replace QA or final PO acceptance.
+
+### Refinement skip conditions
+
+The refinement loop may be skipped when:
+
+- the task already has clear, testable acceptance criteria;
+- the task is a well-defined bug with reproduction steps;
+- a human explicitly marked the task as pre-refined;
+- the task is a simple chore with no ambiguity.
+
+Document the skip reason in the task artifact.
+
 ## Priority rules
 
 Sort actionable tasks by:

@@ -22,6 +22,7 @@ Recommended files:
 ```text
 df/artifacts/{task-id}/
 ├── task.md
+├── refinement-questions.md
 ├── solution-design.md
 ├── dev-notes.md
 ├── qa-report.md
