@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('manual')]
+    [ValidateSet('manual', 'auto')]
     [string]$Adapter = 'manual',
 
     [switch]$DryRun,

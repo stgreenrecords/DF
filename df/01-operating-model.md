@@ -28,7 +28,11 @@ When the current role finishes, it must:
 
 1. document the final task state;
 2. write a handoff note for the next role; and
-3. stop.
+3. end its single-role session.
+
+The `df/agent-router/` orchestrator then starts the next role's session
+automatically (with `--adapter auto`), so the human only starts the factory
+once. Role isolation is preserved: every session still runs exactly one role.
 
 ## Standard flow
 

@@ -65,9 +65,26 @@ After the current role finishes, the agent must:
 
 1. update runtime files;
 2. write a handoff note with the next role and next action; and
-3. stop so a new session can begin for the next role.
+3. end its single-role session.
 
 The agent must not switch roles, self-approve, or combine role checklists in one session.
+
+## Autonomous orchestration
+
+The human starts the factory once. The repository-owned router under
+`df/agent-router/` then chains sessions automatically: when one role-session
+ends, the router reads the board, resolves the next responsible role, and starts
+a fresh single-role session for it. This repeats until the work reaches `DONE`,
+`NO_TASKS`, or `BLOCKED`, the iteration cap is hit, or a session makes no board
+change (stall protection).
+
+- `--adapter manual`: prepares the next role-session prompt and stops after one
+  role; a human starts the next session.
+- `--adapter auto`: runs `$DF_AGENT_CMD` for every role-session and chains them
+  automatically without further human input.
+
+Per-session role isolation is preserved either way: each session still executes
+exactly one role. See `df/agent-router/README.md` for the adapter contract.
 
 ## Documentation rule
 

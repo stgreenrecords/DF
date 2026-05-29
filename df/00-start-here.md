@@ -18,6 +18,14 @@ Pick up the next task.
 Continue SDLC.
 ```
 
+## Autonomous orchestration
+
+The human starts the factory once. The router under `df/agent-router/` then
+repeats the boot sequence below for each role, automatically starting a fresh
+single-role session after the previous one ends. The loop stops only at `DONE`,
+`NO_TASKS`, `BLOCKED`, the iteration cap, or a stall. "Stop the session" means
+end the current single-role session, not stop the factory.
+
 ## Boot sequence
 
 1. Read this file.
@@ -35,7 +43,7 @@ Continue SDLC.
 13. Execute the role checklist.
 14. Update runtime documentation.
 15. Write a handoff note for the next role.
-16. **Stop the session.**
+16. **End this single-role session.**
 
 ## Task selection order
 

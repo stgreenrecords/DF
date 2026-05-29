@@ -60,6 +60,11 @@ Dark Factory is a documentation-first workflow for autonomous AI-assisted softwa
 
 ## Start the factory
 
+The human starts the factory once; the router under `df/agent-router/` then
+chains one single-role session after another automatically.
+
+Preview the plan without launching any session:
+
 ```bash
 ./call-start-factory.bash --dry-run
 ```
@@ -68,11 +73,26 @@ Dark Factory is a documentation-first workflow for autonomous AI-assisted softwa
 .\call-start-factory.ps1 -DryRun
 ```
 
-The included router is intentionally conservative. It supports the `manual` adapter only and expects transcript/evidence files to drive verification rather than IDE automation.
+Run fully autonomously (the router keeps starting the next role-session until the
+work is `DONE`, `NO_TASKS`, `BLOCKED`, the iteration cap, or a stall):
+
+```bash
+DF_AGENT_CMD="your-agent-cli" ./call-start-factory.bash --adapter auto --max-iterations 30
+```
+
+Run conservatively (prepare one role-session prompt, then stop for a human to
+start the next session):
+
+```bash
+./call-start-factory.bash --adapter manual
+```
+
+The router is tool-neutral: `DF_AGENT_CMD` can point at any AI agent CLI or
+wrapper. See `df/agent-router/README.md` for the adapter contract.
 
 ## Non-negotiable principles
 
-- One role per session.
+- One role per session (the router chains sessions automatically; the human starts once).
 - No work is done until QA passes and PO accepts.
 - Every meaningful action updates runtime evidence.
 - Block unclear or unsafe work instead of guessing.

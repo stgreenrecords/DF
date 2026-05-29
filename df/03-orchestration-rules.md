@@ -88,14 +88,27 @@ If a tool or command fails:
 3. try a safe alternative path;
 4. if still blocked, document the blocker and stop.
 
+## Autonomous chaining
+
+A human starts the factory once. The `df/agent-router/` orchestrator then runs
+the main loop above, starting a fresh single-role session for each successive
+role automatically. With `--adapter auto` the chaining needs no further human
+input; with `--adapter manual` the router prepares the next role-session prompt
+and stops so a human can start it. Either way each session runs exactly one role.
+
 ## Stop conditions
 
-The session must stop when:
+A single role-session must end when:
 
-- the current role's work is complete and the handoff is written;
+- the current role's work is complete and the handoff is written.
+
+The whole factory loop stops when:
+
 - all tasks are `DONE`;
 - all remaining tasks are `BLOCKED`;
-- no task exists; or
+- no task exists;
+- the iteration cap (`--max-iterations`) is reached;
+- a role-session makes no board change (stall protection); or
 - continuing would risk data loss, security exposure, or policy violation.
 
 **One session = one role.**
