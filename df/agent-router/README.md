@@ -6,13 +6,20 @@ automatically. On each iteration it:
 1. reads `df/runtime/board.md`;
 2. selects the highest-priority actionable task (per `df/00-start-here.md`);
 3. resolves the responsible role from the task state (and the delivery lane from
-   the board owner column); and
+   the board owner column); blocked tasks whose declared dependencies are all
+   `DONE` are resumed through `sa`; and
 4. launches exactly **one** fresh role-session through the chosen adapter.
 
 After a session returns, the router re-reads the board and launches the next
 role-session, repeating until the work reaches `DONE` / `NO_TASKS` / `BLOCKED`,
 the safety `--max-iterations` cap is hit, or a session makes no board change
 (stall protection).
+
+When no normal actionable state remains, the router performs one more pass over
+`BLOCKED` tasks. If a blocked task's `## Dependencies` entries in
+`df/artifacts/{task-id}/task.md` all point to tasks that are now `DONE` on the
+runtime board, the router sends that blocked task back to `sa` for an
+unblock/reroute session instead of stopping early.
 
 This preserves the **one role per session** principle — each iteration is an
 isolated single-role session — while removing the need for a human to re-trigger
@@ -77,7 +84,8 @@ or wrapper that can read the prompt and act on the repository.
 
 ## Stop conditions
 
-- no actionable task remains (`NO_TASKS` / all `DONE` / all `BLOCKED`);
+- no actionable task remains (`NO_TASKS` / all `DONE` / all `BLOCKED`, including
+  blocked tasks whose declared dependencies are still unresolved);
 - `--max-iterations` reached (re-run to continue);
 - a role-session produced no board change (stall protection);
 - the agent command exits non-zero (the loop aborts).

@@ -74,6 +74,76 @@ EOF
 log() { printf '[df-router] %s\n' "$*" >&2; }
 die() { printf '[df-router][error] %s\n' "$*" >&2; exit 1; }
 
+task_file_for() {
+  printf '%s/df/artifacts/%s/task.md\n' "$DF_ROOT" "$1"
+}
+
+board_state_for_task() {
+  local wanted_task="$1"
+  local prio task state owner
+  local rows
+
+  rows="$(df_parse_board "$DF_BOARD")"
+  [ -n "$rows" ] || return 1
+
+  while IFS=$'\t' read -r prio task state owner; do
+    [ "$task" = "$wanted_task" ] || continue
+    printf '%s\n' "$state"
+    return 0
+  done <<EOF
+$rows
+EOF
+
+  return 1
+}
+
+task_dependencies() {
+  local task_file line in_dependencies=0 dep
+
+  task_file="$(task_file_for "$1")"
+  [ -f "$task_file" ] || return 1
+
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      '## Dependencies')
+        in_dependencies=1
+        continue
+        ;;
+      '## '*)
+        [ "$in_dependencies" -eq 1 ] && break
+        ;;
+    esac
+
+    [ "$in_dependencies" -eq 1 ] || continue
+    case "$line" in
+      -\ *)
+        dep="${line#- }"
+        dep="$(df_trim "$dep")"
+        [ -n "$dep" ] && printf '%s\n' "$dep"
+        ;;
+    esac
+  done < "$task_file"
+}
+
+blocked_task_is_resumable() {
+  local task="$1"
+  local deps dep dep_state found_dependency=0
+
+  deps="$(task_dependencies "$task" || true)"
+  [ -n "$deps" ] || return 1
+
+  while IFS= read -r dep; do
+    [ -n "$dep" ] || continue
+    found_dependency=1
+    dep_state="$(board_state_for_task "$dep" || true)"
+    [ "$dep_state" = "DONE" ] || return 1
+  done <<EOF
+$deps
+EOF
+
+  [ "$found_dependency" -eq 1 ]
+}
+
 # ---- argument parsing -------------------------------------------------------
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -111,6 +181,7 @@ select_next() {
   SEL_TASK_ID=""; SEL_STATE=""; SEL_OWNER=""; SEL_ROLE=""
   local best_rank=9999
   local prio task state owner rank
+  local blocked_task="" blocked_owner=""
   local rows
   rows="$(df_parse_board "$DF_BOARD")"
   [ -n "$rows" ] || return 1
@@ -131,6 +202,31 @@ select_next() {
   done <<EOF
 $rows
 EOF
+
+  if [ -z "$SEL_TASK_ID" ]; then
+    while IFS=$'\t' read -r prio task state owner; do
+      [ -n "$task" ] || continue
+      if [ -n "$FILTER_TASK_ID" ] && [ "$task" != "$FILTER_TASK_ID" ]; then
+        continue
+      fi
+      [ "$state" = "BLOCKED" ] || continue
+      if blocked_task_is_resumable "$task"; then
+        blocked_task="$task"
+        blocked_owner="$owner"
+        break
+      fi
+    done <<EOF
+$rows
+EOF
+  fi
+
+  if [ -n "$blocked_task" ]; then
+    SEL_TASK_ID="$blocked_task"
+    SEL_STATE="BLOCKED"
+    SEL_OWNER="$blocked_owner"
+    SEL_ROLE="sa"
+    return 0
+  fi
 
   [ -n "$SEL_TASK_ID" ] || return 1
 
