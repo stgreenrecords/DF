@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [ValidateSet('manual', 'auto')]
-    [string]$Adapter = 'manual',
+    [string]$Adapter = 'auto',
 
     [switch]$DryRun,
 
@@ -9,7 +9,7 @@ param(
 
     [string]$Role,
 
-    [int]$MaxIterations = 20,
+    [int]$MaxIterations = 300,
 
     [string]$BashPath
 )

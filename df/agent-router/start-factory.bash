@@ -34,8 +34,8 @@ DF_ACTIVITY="$DF_RUNTIME/activity-log.md"
 . "$DF_ROUTER_DIR/board-parser.bash"
 
 # ---- defaults ---------------------------------------------------------------
-ADAPTER="manual"
-MAX_ITERATIONS=20
+ADAPTER="${DF_FACTORY_ADAPTER:-auto}"
+MAX_ITERATIONS="${DF_FACTORY_MAX_ITERATIONS:-300}"
 FILTER_TASK_ID=""
 FORCE_ROLE=""
 DRY_RUN=0
@@ -45,8 +45,8 @@ usage() {
 Usage: start-factory.bash [options]
 
 Options:
-  --adapter <manual|auto>   Session driver. Default: manual.
-  --max-iterations <n>      Safety cap on chained role-sessions. Default: 20.
+  --adapter <manual|auto>   Session driver. Default: auto.
+  --max-iterations <n>      Safety cap on chained role-sessions. Default: 300.
   --task-id <id>            Restrict the loop to a single task id.
   --role <short-name>       Force the first role-session (sa, qa, po, ...).
   --dry-run                 Plan and print actions without launching sessions.
@@ -62,6 +62,12 @@ Environment:
                               $4 = prompt file path
                             The command MUST update df/runtime/board.md to
                             reflect the new state when the role finishes.
+  DF_FACTORY_ADAPTER        Default adapter when --adapter is not passed.
+                             Default: auto.
+  DF_FACTORY_MAX_ITERATIONS Default iteration cap when --max-iterations is not
+                             passed. Default: 300.
+  DF_FACTORY_ENV_FILE       Optional env file loaded by call-start-factory.bash.
+                             Default: ./.df-factory.env
 EOF
 }
 
@@ -94,7 +100,7 @@ esac
 [ -f "$DF_BOARD" ] || die "board not found: $DF_BOARD (create it from df/templates/board.md)"
 
 if [ "$ADAPTER" = "auto" ] && [ "$DRY_RUN" -eq 0 ]; then
-  [ -n "${DF_AGENT_CMD:-}" ] || die "auto adapter requires DF_AGENT_CMD to be set"
+  [ -n "${DF_AGENT_CMD:-}" ] || die "auto adapter requires DF_AGENT_CMD to be set (export it or create .df-factory.env)"
 fi
 
 # ---- task selection ---------------------------------------------------------

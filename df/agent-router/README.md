@@ -18,6 +18,9 @@ This preserves the **one role per session** principle — each iteration is an
 isolated single-role session — while removing the need for a human to re-trigger
 each role by hand.
 
+For human-facing start, monitoring, and troubleshooting instructions, see
+`FACTORY-USER-MANUAL.md` in the repository root.
+
 ## Files
 
 - `start-factory.bash` — entrypoint and main loop.
@@ -27,14 +30,23 @@ each role by hand.
 ## Usage
 
 ```bash
-# Conservative: prepare ONE role-session prompt and stop (human-driven chaining).
-./call-start-factory.bash --adapter manual
+# One-time local setup for your agent launcher.
+cp .df-factory.env.example .df-factory.env
 
-# Autonomous: chain role-sessions automatically until a stop condition.
-DF_AGENT_CMD="my-agent-cli" ./call-start-factory.bash --adapter auto --max-iterations 30
+# Default startup: auto adapter, 300 iterations.
+./start factory
+
+# Equivalent direct wrapper invocation.
+./call-start-factory.bash
+
+# Autonomous with explicit one-off overrides.
+DF_AGENT_CMD="my-agent-cli" ./call-start-factory.bash --adapter auto --max-iterations 300
 
 # Plan only, no sessions launched.
 ./call-start-factory.bash --dry-run
+
+# Conservative: prepare ONE role-session prompt and stop (human-driven chaining).
+./call-start-factory.bash --adapter manual
 ```
 
 ## Adapters
@@ -43,6 +55,10 @@ DF_AGENT_CMD="my-agent-cli" ./call-start-factory.bash --adapter auto --max-itera
 |---|---|
 | `manual` | Prints the next role-session prompt and stops after one role. A human copies it into a new session. |
 | `auto`   | Runs `$DF_AGENT_CMD` for every role-session and loops automatically until a stop condition. |
+
+`call-start-factory.bash` loads an optional repo-local `.df-factory.env` file
+before launching the router. Use it to persist `DF_AGENT_CMD` and override the
+default startup values without retyping them on every run.
 
 ### `auto` adapter contract
 

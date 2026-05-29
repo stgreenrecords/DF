@@ -2,5 +2,5 @@
 
 | ID | Risk/blocker | Severity | Owner | Status | Mitigation |
 |---|---|---|---|---|---|
-| - | No open risks recorded yet | - | - | - | Add risks as work begins |
+| R-001 | Example risk | Medium | sa | Open | Document mitigation here |
 

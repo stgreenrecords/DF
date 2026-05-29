@@ -1,100 +1,68 @@
-# Dark Factory Template
+# Dark Factory Framework
 
-Dark Factory is a documentation-first workflow for autonomous AI-assisted software delivery. This template packages the framework as a clean, project-agnostic, IDE-agnostic starting point.
+Dark Factory is a documentation-first workflow for autonomous AI-assisted software delivery.
+This extracted folder contains only the reusable framework and startup tooling, without the current LAN file sharing project backlog or runtime history.
 
-## What this template includes
+## Included
 
-- core workflow rules under `df/`
-- role definitions for `sa`, `designer`, `backend-dev`, `frontend-dev`, `devops`, `data-engineer`, `qa`, and `po`
-- runtime tracking skeletons under `df/runtime/`
-- reusable task and evidence templates under `df/templates/`
-- a repository-owned role-session router under `df/agent-router/`
-- cross-platform convenience wrappers: `call-start-factory.bash` and `call-start-factory.ps1`
+- framework rules under `df/`
+- role guides under `df/roles/`
+- reusable templates under `df/templates/`
+- router scripts under `df/agent-router/`
+- clean runtime skeletons under `df/runtime/`
+- startup helpers: `start`, `call-start-factory.bash`, `call-start-factory.ps1`
+- operator guide: `FACTORY-USER-MANUAL.md`
 
-## What this template intentionally excludes
+## Not included
 
-- project-specific backlog items
-- project-specific architecture, domain, or product content
-- IDE-specific adapters or watcher automation
-- IDE-specific files, docs, or launch flows
-- repository-specific implementation code
+- project-specific task backlog
+- project-specific task artifacts
+- project-specific runtime history
+- project-specific decisions or risks
 
-## Recommended reading order
+## Quick start
 
-1. `AGENTS.md`
-2. `df/00-start-here.md`
-3. `df/01-operating-model.md`
-4. `df/02-state-machine.md`
-5. `df/03-orchestration-rules.md`
-6. `df/04-documentation-standards.md`
-7. the active role file in `df/roles/`
-8. the current runtime files in `df/runtime/`
+From this folder:
 
-## Minimal structure
-
-```text
-.
-|-- AGENTS.md
-|-- call-start-factory.bash
-|-- call-start-factory.ps1
-|-- design/
-`-- df/
-    |-- 00-start-here.md
-    |-- 01-operating-model.md
-    |-- 02-state-machine.md
-    |-- 03-orchestration-rules.md
-    |-- 04-documentation-standards.md
-    |-- agent-router/
-    |-- artifacts/
-    |-- roles/
-    |-- runtime/
-    `-- templates/
+```zsh
+./start factory --dry-run
 ```
 
-## First-time setup
+That shows the next planned role-session without launching a real agent session.
 
-1. Copy this folder into a new repository.
-2. Update `AGENTS.md` only if you need repo-specific guardrails.
-3. Start with an empty runtime board or add your first task to `df/runtime/board.md`.
-4. Create project-specific backlog/docs outside this template if you need them.
+## First use in a new project
 
-## Start the factory
+1. copy this folder into a new repository;
+2. update `AGENTS.md` only if you need repository-specific guardrails;
+3. create or edit tasks in `df/runtime/board.md`;
+4. configure `.df-factory.env` if you want local launcher defaults; and
+5. start the factory.
 
-The human starts the factory once; the router under `df/agent-router/` then
-chains one single-role session after another automatically.
+## Main commands
 
-Preview the plan without launching any session:
+Start with defaults:
 
-```bash
+```zsh
+./start factory
+```
+
+Preview only:
+
+```zsh
 ./call-start-factory.bash --dry-run
 ```
 
-```powershell
-.\call-start-factory.ps1 -DryRun
-```
+Manual one-step mode:
 
-Run fully autonomously (the router keeps starting the next role-session until the
-work is `DONE`, `NO_TASKS`, `BLOCKED`, the iteration cap, or a stall):
-
-```bash
-DF_AGENT_CMD="your-agent-cli" ./call-start-factory.bash --adapter auto --max-iterations 30
-```
-
-Run conservatively (prepare one role-session prompt, then stop for a human to
-start the next session):
-
-```bash
+```zsh
 ./call-start-factory.bash --adapter manual
 ```
 
-The router is tool-neutral: `DF_AGENT_CMD` can point at any AI agent CLI or
-wrapper. See `df/agent-router/README.md` for the adapter contract.
+## More help
 
-## Non-negotiable principles
+See:
 
-- One role per session (the router chains sessions automatically; the human starts once).
-- No work is done until QA passes and PO accepts.
-- Every meaningful action updates runtime evidence.
-- Block unclear or unsafe work instead of guessing.
-- Preserve user work and prefer minimal, reversible changes.
+- `FACTORY-USER-MANUAL.md`
+- `AGENTS.md`
+- `df/agent-router/README.md`
 
