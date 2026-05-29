@@ -1,4 +1,17 @@
-# Dev Notes - {task-id}
+# Implementation Notes - {task-id}
+
+## Lane
+
+backend-dev | frontend-dev | devops | data-engineer
+
+## Artifact ownership
+
+Write this file only inside the owning lane folder:
+
+- `df/artifacts/{task-id}/backend/dev-notes.md`
+- `df/artifacts/{task-id}/frontend/dev-notes.md`
+- `df/artifacts/{task-id}/devops/dev-notes.md`
+- `df/artifacts/{task-id}/data/data-notes.md`
 
 ## Implementation summary
 
@@ -28,7 +41,7 @@ Result: PASS | FAIL | SKIPPED
 
 Yes/No
 
-## Dev handoff
+## Implementation handoff
 
 {summary for QA}
 

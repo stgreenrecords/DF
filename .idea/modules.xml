@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Dark Factory Framework.iml" filepath="$PROJECT_DIR$/Dark Factory Framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Dark Factory Framework.iml" filepath="$PROJECT_DIR$/.idea/Dark Factory Framework.iml" />
     </modules>
   </component>
 </project>

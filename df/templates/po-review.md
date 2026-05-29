@@ -37,6 +37,6 @@ ACCEPTED | REJECTED | BLOCKED
 
 ## Next action
 
-- If accepted: `dev` picks next task.
-- If rejected: return to `dev`.
+- If accepted: the next responsible role or lane picks the next task.
+- If rejected: return to the responsible lane.
 

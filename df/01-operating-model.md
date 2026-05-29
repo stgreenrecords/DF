@@ -2,18 +2,33 @@
 
 ## Roles
 
-Dark Factory uses four required roles.
+Dark Factory uses eight required roles.
 
 | Role | Short name | Purpose |
 |---|---|---|
-| Solution Architect | `sa` | Converts requirements into a safe, coherent technical plan and guards architecture quality. |
-| Developer | `dev` | Implements the task, writes/updates tests, and prepares evidence for QA. |
-| Quality Engineer | `qa` | Verifies the implementation through automated and manual-quality checks. |
-| Product Owner | `po` | Validates business outcome through E2E review, screenshots, and acceptance/rejection. |
+| Solution Architect | `sa` | Refines tasks, defines acceptance criteria, and guards solution design quality. |
+| Designer | `designer` | Produces UI/UX design packages before visible frontend changes. |
+| Backend Developer | `backend-dev` | Implements backend services, APIs, persistence, migrations, and backend tests. |
+| Frontend Developer | `frontend-dev` | Implements client applications, UI behavior, accessibility, and frontend tests. |
+| DevOps Engineer | `devops` | Implements CI/CD, automation, runtime packaging, infrastructure, and environment tooling. |
+| Data Engineer | `data-engineer` | Produces datasets, fixtures, imports, source maps, and data-quality evidence. |
+| Quality Engineer | `qa` | Verifies work independently through tests and structured quality checks. |
+| Product Owner | `po` | Validates business outcome and accepts or rejects the result. |
 
 ## Role ownership
 
-A role owns the task only while the task is in that role's state. Ownership must be documented in `df/runtime/board.md` and the task artifact.
+A role owns a task only while the task is in that role's state.
+Ownership must be reflected in `df/runtime/board.md` and, when applicable, the matching design or delivery subdashboard.
+
+## Single-role-per-session rule
+
+**An agent must not switch roles within one session.**
+
+When the current role finishes, it must:
+
+1. document the final task state;
+2. write a handoff note for the next role; and
+3. stop.
 
 ## Standard flow
 
@@ -21,9 +36,11 @@ A role owns the task only while the task is in that role's state. Ownership must
 OPEN
   -> INTAKE
   -> REFINEMENT_IN_PROGRESS
-  -> REFINEMENT_QUESTIONS (loop until all questions answered)
+  -> REFINEMENT_QUESTIONS
   -> REFINED
-  -> NEEDS_ARCHITECTURE (if needed)
+  -> NEEDS_ARCHITECTURE
+  -> READY_FOR_DESIGN (if UI design is required)
+  -> DESIGN_IN_PROGRESS
   -> READY_FOR_DEV
   -> DEV_IN_PROGRESS
   -> READY_FOR_QA
@@ -31,84 +48,52 @@ OPEN
   -> READY_FOR_PO
   -> PO_REVIEW
   -> DONE
-  -> next task
 ```
 
-If the task already has clear acceptance criteria and no refinement is needed, it may skip directly from `OPEN` to `NEEDS_ARCHITECTURE` or `READY_FOR_DEV`.
+Small, well-defined tasks may skip refinement or architecture when the skip reason is documented.
+Documentation/process-only changes may move from `ARCHITECTURE_IN_PROGRESS` directly to `READY_FOR_QA` when no delivery lane is required.
 
-If architecture is unnecessary for a small, low-risk task, `dev` may document `Architecture: not required` with a reason and move directly from `REFINED` to `READY_FOR_DEV`.
+## Delivery lane routing
 
-## Definition of Refined
+Before work moves to `READY_FOR_DEV`, SA must route it to exactly one delivery lane:
 
-A task may move to `REFINED` only when:
+- `backend-dev`
+- `frontend-dev`
+- `devops`
+- `data-engineer`
 
-- raw input has been converted into a clear task summary and business goal;
-- acceptance criteria are specific, testable, and scoped;
-- refinement questions are answered with documented answer authority, or explicitly marked not applicable;
-- critical unanswered product, legal, security, compliance, budget, or scope decisions are not present;
-- low-risk assumptions, if any, are documented in `task.md` and referenced in the next handoff;
-- independent deliverables have been split into child tasks or documented as intentionally bundled;
-- expected validation approach is known well enough for Dev and QA to plan tests.
+If a task spans multiple lanes, split it into child tasks unless the work is inseparable and must be serialized.
 
-A task must not be marked `REFINED` when the only basis for a critical product decision is an AI-generated guess.
+## Lane artifact ownership
 
-## Rework flow
+Each delivery lane writes only in its own artifact folder:
 
 ```text
-QA_FAILED -> RETURNED_TO_DEV -> DEV_IN_PROGRESS -> READY_FOR_QA
-PO_REJECTED -> RETURNED_TO_DEV -> DEV_IN_PROGRESS -> READY_FOR_QA
+df/artifacts/{task-id}/backend/
+df/artifacts/{task-id}/frontend/
+df/artifacts/{task-id}/devops/
+df/artifacts/{task-id}/data/
 ```
 
-All rework must include defect evidence, reproduction steps, expected result, actual result, and severity.
+Designer documentation belongs under `df/artifacts/{task-id}/design/`, while design assets belong under root `design/{page-slug}/`.
+
+## Frontend design gate
+
+Visible UI work requires a design package before `frontend-dev` changes user-facing behavior or markup.
+If no design package exists, the work must be blocked or routed to `designer` first.
 
 ## Communication protocol
 
-Agents communicate through Markdown, not private memory.
+Agents communicate through repository artifacts, not hidden state.
+Every role session must leave behind a start/finish trail, evidence, and a handoff.
 
-Required communication points:
-
-- role start note;
-- role completion note;
-- handoff note;
-- blocker note;
-- decision record for meaningful architecture/product decisions;
-- verification evidence.
-
-## Definition of Ready
-
-A task is ready for development when:
-
-- task id and summary exist;
-- refinement is complete (acceptance criteria exist or assumptions are documented);
-- all refinement questions have been answered with authority, documented as safe low-risk assumptions, or moved to blockers;
-- no critical unanswered refinement decision remains;
-- dependencies and blockers are known;
-- architecture guidance exists when needed;
-- expected validation path is defined.
-
-## Definition of Done
+## Definition of done
 
 A task is done only when:
 
-- implementation is complete;
-- relevant unit tests pass or a documented reason explains why none apply;
-- relevant integration tests pass or a documented reason explains why none apply;
-- QA has approved the task;
-- PO has completed E2E validation;
-- screenshots or equivalent visual evidence are attached for UI changes;
-- PO has accepted the result;
-- all runtime files are updated.
-
-## Human-in-the-loop rules
-
-Ask for human input only when required:
-
-- credentials/secrets are missing;
-- paid service or infrastructure change is needed;
-- destructive data operation is required;
-- legal/security/privacy risk exists;
-- requirement ambiguity cannot be safely resolved;
-- external system access is unavailable.
-
-Do not ask humans to perform routine SDLC work that agents can do with available tools.
+- implementation or documentation is complete;
+- relevant tests/checks passed or limits are documented;
+- QA approved the task;
+- PO accepted the task; and
+- runtime files are updated.
 

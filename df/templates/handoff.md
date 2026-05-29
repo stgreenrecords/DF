@@ -6,6 +6,7 @@
 - Task: {task-id}
 - From state: {state}
 - To state: {state}
+- Lane: designer | backend-dev | frontend-dev | devops | data-engineer | n/a
 - Summary: {what changed or what was verified}
 
 ## Evidence

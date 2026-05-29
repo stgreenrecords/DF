@@ -7,6 +7,8 @@ Follow the universal Dark Factory instructions in `AGENTS.md` and the detailed w
 - Treat `df/00-start-here.md` as the boot sequence.
 - Use role files in `df/roles/` for behavior and deliverables.
 - Update runtime evidence in `df/runtime/` and task artifacts in `df/artifacts/{task-id}/`.
+- Execute exactly one Dark Factory role per Copilot session.
+- After completing the current role, write the handoff, then stop and request a new session for the next role.
 - Do not finish a task unless `qa` has passed it and `po` has accepted it.
 - If work is rejected, return it to `dev` with evidence and defects.
 

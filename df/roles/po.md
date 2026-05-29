@@ -61,7 +61,7 @@ Before review, confirm:
 
 - task id and acceptance criteria;
 - QA pass report;
-- dev notes;
+- design or delivery-lane notes;
 - known risks;
 - deployed/local environment or runnable artifact;
 - UI screenshots if QA already captured any.
@@ -77,7 +77,7 @@ Before review, confirm:
 7. Record review in `df/artifacts/{task-id}/po-review.md`.
 8. If result is not good enough, move to `PO_REJECTED`, create rework notes, then move to `RETURNED_TO_DEV`.
 9. If result is acceptable, move to `DONE`.
-10. Ping `dev` to pick up the next task if any actionable task remains.
+10. Hand off to the next responsible role or lane if any actionable task remains.
 
 ## PO acceptance criteria
 
@@ -113,7 +113,7 @@ If screenshots cannot be captured, PO must document why and provide alternative 
 - E2E evidence: {screenshots/logs/notes}
 - Expected result: {expected}
 - Actual result: {actual}
-- Rework requested from Dev: {clear instructions}
+- Rework requested from responsible lane: {clear instructions}
 - Next state: RETURNED_TO_DEV
 ```
 
@@ -128,7 +128,7 @@ If screenshots cannot be captured, PO must document why and provide alternative 
 - Screenshots/evidence: {paths or not applicable reason}
 - Product notes: {notes}
 - Risks accepted: {none or list}
-- Next: Dev should pick up the next actionable task.
+- Next: The responsible role or lane should pick up the next actionable task.
 ```
 
 ## PO must not

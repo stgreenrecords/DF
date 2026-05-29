@@ -4,10 +4,15 @@
 
 | File | Purpose |
 |---|---|
-| `df/runtime/board.md` | Current task queue and states. |
-| `df/runtime/activity-log.md` | Chronological record of factory activity. |
-| `df/runtime/decisions.md` | Architecture/product/quality decisions. |
-| `df/runtime/risks.md` | Open risks, blockers, and mitigations. |
+| `df/runtime/board.md` | current task queue and states |
+| `df/runtime/design-board.md` | designer queue mirror |
+| `df/runtime/backend-dev-board.md` | backend delivery queue mirror |
+| `df/runtime/frontend-dev-board.md` | frontend delivery queue mirror |
+| `df/runtime/devops-board.md` | DevOps delivery queue mirror |
+| `df/runtime/data-engineer-board.md` | data delivery queue mirror |
+| `df/runtime/activity-log.md` | chronological record of activity |
+| `df/runtime/decisions.md` | architecture/product/quality decisions |
+| `df/runtime/risks.md` | risks and blockers |
 
 ## Required task artifact folder
 
@@ -17,54 +22,62 @@ Each task must have a folder:
 df/artifacts/{task-id}/
 ```
 
-Recommended files:
+Recommended structure:
 
 ```text
 df/artifacts/{task-id}/
-├── task.md
-├── refinement-questions.md
-├── solution-design.md
-├── dev-notes.md
-├── qa-report.md
-├── po-review.md
-├── defects.md
-├── handoffs.md
-└── screenshots/
+|-- task.md
+|-- refinement-questions.md
+|-- solution-design.md
+|-- design/
+|-- backend/
+|-- frontend/
+|-- devops/
+|-- data/
+|-- qa-report.md
+|-- po-review.md
+|-- defects.md
+|-- handoffs.md
+`-- screenshots/
 ```
 
-If a task has no UI, the `screenshots/` folder may be omitted and PO must state why screenshots are not applicable.
+Create only the folders that apply to the task.
+
+## Design asset rule
+
+Designer documentation stays under `df/artifacts/{task-id}/design/`, but design assets such as HTML, PNG, SVG, PDF, and similar files belong under:
+
+```text
+design/{page-slug}/
+```
+
+Use globally unique, descriptive page slugs.
+
+## Documentation ownership
+
+- `sa` owns refinement, solution design, lane routing, and shared task setup.
+- `designer` writes only design-owned task artifacts.
+- delivery lanes write only their own lane artifacts.
+- `qa` writes QA reports and defects.
+- `po` writes PO reviews and acceptance/rejection evidence.
 
 ## Timestamp format
 
-Use ISO-like local timestamp:
+Use:
 
 ```text
-YYYY-MM-DD HH:mm {timezone if known}
+YYYY-MM-DD HH:mm local
 ```
 
-If timezone is unknown, use local system time and write `local`.
-
-## Evidence links
-
-Evidence can point to:
-
-- files in this repository;
-- terminal command output copied into an artifact;
-- CI build URLs;
-- PR URLs;
-- issue tracker URLs;
-- screenshot file paths;
-- logs with secrets redacted.
+or include a timezone if known.
 
 ## Markdown quality rules
 
 - Be factual and concise.
+- Record exact commands when they matter.
 - Separate expected vs actual behavior.
-- Record assumptions explicitly.
-- Record commands exactly as run.
-- Redact secrets and personal data.
-- Do not overwrite historical logs; append new entries.
-- When correcting a previous entry, add a correction note instead of deleting history.
+- Append history; do not silently rewrite it.
+- Redact secrets and private data.
 
 ## Minimum activity log entry
 
@@ -74,40 +87,18 @@ Evidence can point to:
 - State: {state}
 - Action: {what was done}
 - Evidence: {files/commands/screenshots}
-- Result: {pass/fail/blocked/partial}
+- Result: PASS | FAIL | BLOCKED | PARTIAL
 - Next: {next role/action}
+- Risks/blockers: {none or list}
 ```
-
-## Screenshot rules
-
-PO must capture screenshots for UI-facing changes when possible.
-
-Screenshot evidence should include:
-
-- final happy-path result;
-- changed UI area;
-- error state if relevant;
-- browser/device/viewport when known;
-- file path under `df/artifacts/{task-id}/screenshots/`.
-
-If screenshot capture is impossible, PO must document:
-
-- why it is impossible;
-- what alternative evidence was used;
-- whether acceptance is conditional.
 
 ## Test evidence rules
 
-QA and Dev must record:
+Implementation roles and QA must record:
 
-- test command;
-- environment;
-- result;
-- failures;
-- reruns;
-- skipped tests and reason.
-
-## Decision record rules
-
-Use `df/templates/decision-record.md` for decisions that affect architecture, scope, behavior, security, data, test strategy, or deployment.
+- the command or source of evidence;
+- the environment;
+- the result;
+- failures or reruns;
+- skipped checks and why they were skipped.
 

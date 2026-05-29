@@ -27,11 +27,11 @@
 
 ### Root cause
 
-{to be filled by dev after analysis}
+{to be filled by the responsible lane owner after analysis}
 
 ### Fix evidence
 
-{to be filled by dev}
+{to be filled by the responsible lane owner}
 
 ### Retest evidence
 
